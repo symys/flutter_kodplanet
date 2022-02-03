@@ -35,6 +35,45 @@ class MyApp extends StatelessWidget {
                       'Merhaba, ben Şeyma !',
                       style: GoogleFonts.pacifico(fontSize: 15, color: Colors.white)
                       ),
+                    Container(
+                      width: 200,
+                      child: Divider(
+                        height: 30,
+                        color : Colors.redAccent
+                      ),
+                    ),
+                    SizedBox(height: 15.0,),
+                    Card(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 45.0
+                      ),
+                      color: Colors.blueGrey,
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.email,
+                          color : Colors.white,
+                        ),
+                        title: Text('abc@gmail.com', style: TextStyle(
+                            fontSize: 14,
+                                color: Colors.white)),
+                      ),
+                    ),
+                    SizedBox(height: 15.0,),
+                    Card(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 45.0
+                      ),
+                      color: Colors.blue,
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.email,
+                          color : Colors.white,
+                        ),
+                        title: Text('abc@gmail.com', style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white)),
+                      ),
+                    ),
                   ],
                 ),
               ),
