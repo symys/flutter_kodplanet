@@ -12,14 +12,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String sehir = 'Ankara';
-  int sicaklik = 20;
+  int? sicaklik;
   var locationData;
   var woeid;
   var temp;
 
   Future<void> getLocation() async {
     locationData = await http.get(Uri.parse(
-        'https://www.metaweather.com/api/location/search/?query=Ankara'));
+        'https://www.metaweather.com/api/location/search/?query=$sehir'));
     var locationDataParsed = jsonDecode(locationData.body);
     woeid = locationDataParsed[0]['woeid'];
   }
@@ -28,15 +28,22 @@ class _HomePageState extends State<HomePage> {
     var temperatureData = await http
         .get(Uri.parse('https://www.metaweather.com/api/location/$woeid/'));
     var temperatureDataParsed = jsonDecode(temperatureData.body);
-    temp = temperatureDataParsed['consolidated_weather'][0]['the_temp'];
-    print(temp);
+    //sicaklik = temperatureDataParsed['consolidated_weather'][0]['the_temp'];
+
+    setState((){
+      sicaklik = temperatureDataParsed['consolidated_weather'][0]['the_temp'].round();
+      print('setState cagirildi');
+    });
+  }
+
+  void getDataFromAPI() async {
+    await getLocation();
+    getTemperature();
   }
 
   @override
   void initState() {
-    getLocation();
-    print('woeid: $woeid');
-    getTemperature();
+    getDataFromAPI();
     // TODO: implement initState
     super.initState();
   }
@@ -48,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         image: DecorationImage(
             fit: BoxFit.cover, image: AssetImage('assets/images/c.jpg')),
       ),
-      child: Scaffold(
+      child: sicaklik == null ? Center(child: CircularProgressIndicator()):Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
           child: Column(
@@ -77,11 +84,15 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(fontSize: 30),
                   ),
                   IconButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        sehir = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SearchPage()));
+                        getDataFromAPI();
+                        setState(() {
+                          sehir = sehir;
+                        });
                       },
                       icon: Icon(Icons.search))
                 ],
