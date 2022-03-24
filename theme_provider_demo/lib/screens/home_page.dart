@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/item_card.dart';
 import '../models/items_data.dart';
+import '../screens/adding_item.dart';
+import './settings_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,6 +13,12 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
+        actions: [Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(icon:Icon(Icons.settings), onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsPage()));
+          },),
+        ),],
         title: Text('Just Do It'),
       ),
       body: Column(
@@ -48,6 +56,10 @@ class HomePage extends StatelessWidget {
                               Provider.of<ItemData>(context, listen: false)
                                   .toggleStatus(index);
                             },
+                        deleteItem: (_) {
+                          Provider.of<ItemData>(context, listen: false)
+                              .removeItem(index);
+                        },
                           )),
                 ),
                 height: 400,
@@ -60,7 +72,14 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          showModalBottomSheet(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            context: context,
+            builder: (context) => AddingItem(),
+           isScrollControlled: true, //klavye simulatorunde buttonun altta kalması durumuna karşı cozum
+          );
+        },
         child: Icon(Icons.add),
       ),
     );
